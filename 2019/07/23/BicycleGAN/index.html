@@ -271,8 +271,8 @@ G^*,E^*=arg \ min_{G,E}\  max_D\   \ {\mathcal L_{GAN}(G,D )+\lambda_{latent} \m
 <h4 id="4-OurHybridModel-BicycleGAN"><a href="#4-OurHybridModel-BicycleGAN" class="headerlink" title="4.OurHybridModel: BicycleGAN"></a>4.OurHybridModel: BicycleGAN</h4><p>将<strong>cVAE-GAN</strong>和<strong>cLR-GAN</strong>组合为混合模型，得到我们的模型<strong>BicycleGAN</strong>。对于<strong>cVAE-GAN</strong>，网络是从实际数据中学习的，但随机向量$z$在测试时可能无法产生逼真的图像—$KL$损失可能无法很好地优化。 更重要的是，判别器$D$在训练期间得不到前面采样的信息（因为$Q(z|B)$是先验分布，而不是随机抽样得来的）。在<strong>cLR-GAN</strong>中，随机向量$z$很容易从简单的分布中采样，但是生成器在训练过程中没有得到真实图像的输入对其的优化（可对比cVAE-GAN来看）。将这两个模型结合起来，可以同时具备这两个循环（$\hat{B}\to z\to\hat{B}$， $z\to \hat{B} \to \hat{z}$）的优势。总的损失为：</p>
 <script type="math/tex; mode=display">
 G^*,E^*=arg \ min_{G,E}\  max_D\  \  \mathcal{ L}^{VAE}_{GAN}(G,D,E)+\lambda\mathcal{L}_1^{VAE}(G) +\mathcal L_{GAN}(G,D )+\lambda_{latent} \mathcal{L}_1^{latent}(G,E) +\lambda_{KL} \mathcal{L}_{KL}(E)\tag{9}</script><p>论文的内容到此就结束了。接下来主要是我研究代码后学到的一些内容。因为论文中具体的网络结构并不清楚，在看完代码后才理清了思路。并且利用TensorFlow画出来graph来。(GitHub上论文的<a href="https://github.com/gitlimlab/BicycleGAN-Tensorflow" target="_blank" rel="noopener">TensorFlow版本代码</a>，原作为<a href="https://github.com/junyanz/BicycleGAN" target="_blank" rel="noopener">PyTorch版本</a>)</p>
-<p>我自己看PyTorch版本代码画出的结构图（尽力了，呼……）<br><img src="/BicycleGAN论文/net.png" alt="net"></p>
-<p>利用Tensorboard画的graph<br><img src="/BicycleGAN论文/graph.png" alt="graph"></p>
+<p>我自己看PyTorch版本代码画出的结构图（尽力了，呼……）<br><img src="/BicycleGAN/net.png" alt="net"></p>
+<p>利用Tensorboard画的graph<br><img src="/BicycleGAN/graph.png" alt="graph"></p>
 
         </div>
 
@@ -287,7 +287,7 @@ G^*,E^*=arg \ min_{G,E}\  max_D\  \  \mathcal{ L}^{VAE}_{GAN}(G,D,E)+\lambda\mat
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://yoursite.com/2019/07/23/BicycleGAN%E8%AE%BA%E6%96%87/">http://yoursite.com/2019/07/23/BicycleGAN%E8%AE%BA%E6%96%87/</a></span>
+                        <span><a href="http://yoursite.com/2019/07/23/BicycleGAN/">http://yoursite.com/2019/07/23/BicycleGAN/</a></span>
                     </p>
                 
                 
@@ -321,7 +321,7 @@ G^*,E^*=arg \ min_{G,E}\  max_D\  \  \mathcal{ L}^{VAE}_{GAN}(G,D,E)+\lambda\mat
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/07/25/InfoGAN%E8%AE%BA%E6%96%87/">InfoGAN论文</a>
+                <a class="prev" rel="prev" href="/2019/07/25/InfoGAN/">InfoGAN论文</a>
             
             
             <a class="next" rel="next" href="/2019/07/23/my%20first%20blog/">My first blog!!!</a>
@@ -340,20 +340,5 @@ G^*,E^*=arg \ min_{G,E}\  max_D\  \  \mathcal{ L}^{VAE}_{GAN}(G,D,E)+\lambda\mat
 </footer>
 
     </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
