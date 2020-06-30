@@ -236,7 +236,7 @@
 <p>在<strong>BicycleGAN</strong>中，用到了<a href="https://arxiv.org/pdf/1606.03657.pdf" target="_blank" rel="noopener"><strong>InfoGAN</strong></a>的相关知识，因此又补了一下这篇论文。</p>
 <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>在传统的GANs中，生成器学习到的图像特征比如在人脸图像中，人像是否戴眼镜、发人的色这些特征，都是混合在一起的。在特征空间中，你很难将这些它们分解开来。本文试图利用无监督学习的方法，将这些特征空间进行分解，使其具有更强的解释性。</p>
 <h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><p>在理想情况下，比如在MNIST手写数据集中，生成器可以自动选择分配随机变量来表示数字标识1-9，并且有两个额外的连续变量来表示数字的理想角度和笔画的粗细。而如果我们我们可以用无监督学习的方法来恢复这些概念，就会非常有用。</p>
-<p>作者首先提出将输入的噪声分为两个部分：(1)$z$，不可压缩的噪声和(2)$c$，潜在编码(latent code)。其中潜在编码是针对数据分布的结构化语义特征。（也就是辅助对特征进行分解的）因此生成器也就变为了$G(z,c)$。</p>
+<p>作者首先提出将输入的噪声分为两个部分：$(1)z$，不可压缩的噪声和$(2)c$，潜在编码(latent code)。其中潜在编码是针对数据分布的结构化语义特征。（也就是辅助对特征进行分解的）因此生成器也就变为了$G(z,c)$。</p>
 <p>然而，由于GANs非常的领会，生成器总会找到一个解，使得$P_G(x|z)=P_G(x)$，这样就会忽略潜在编码$c$对其的作用。为了解决这个问题，作者提出了$I(c;G(z,c))$用来表示潜在编码$c$和生成器结果$G(z,c)$之间的交互信息。为了$z$对生成器产生了足够大的影响，$I(c;G(z,c))$应该足够大。</p>
 <p>$I(X;Y)$被定义为两个信息熵的插值，有公式：</p>
 <script type="math/tex; mode=display">
@@ -340,5 +340,20 @@ L_1(G,Q) &=E_{x\sim G(z,c)}\left[\mathbb{E}_{c^{'}\sim P(c|x)}\left[\log Q(c^{'}
 </footer>
 
     </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
