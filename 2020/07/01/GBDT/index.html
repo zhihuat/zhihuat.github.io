@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="zhihuaT">
+
+
+
+
+
+<title>GBDT | zhihuaT</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">zhihuaT</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">zhihuaT</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">GBDT</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">zhihuaT</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 1, 2020&nbsp;&nbsp;10:24:20</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>介绍<strong>GBDT</strong>，并记录<strong>XGBoost</strong>理论推导。</p>
+<a id="more"></a>
+<p>GBDT(Gradient Boost Decision Tree)，即利用Gradient Boost的学习策略来训练决策树。Boost的策略我们已经有所了解，但Gradient又是如何体现的呢？</p>
+<p>整个算法最后的训练得到的是$k$个简单的决策树：$T_1,T_2,…,T_k$，而模型的输出，则是样本在各个决策树上的结果之和：</p>
+<script type="math/tex; mode=display">
+\hat{y}=\sum_{i=1}^{k}f_{i}(x),f_k\subset\Gamma</script><p>其中，$ f_k$表示样本到树输出的映射。</p>
+<h3 id="XGBoost理论推导"><a href="#XGBoost理论推导" class="headerlink" title="XGBoost理论推导"></a>XGBoost理论推导</h3><p>已知GBDT可以用以下公式表示:</p>
+<p>$\hat{y}=\sum<em>{i=1}^{k}f</em>{i}(x),f_k\subset\Gamma$</p>
+<p>优化目标为：</p>
+<p>$Obj=\sum\limits<em>{i=1}^{n}l(y_i, \hat{y_i})+\sum\limits</em>{i=1}^{K}\Omega(f_i)$</p>
+<p>那么我们的目标则为训练一组数，令$Obj$达到最小</p>
+<h4 id="追加训练法（Additive-Training，Boost）"><a href="#追加训练法（Additive-Training，Boost）" class="headerlink" title="追加训练法（Additive Training，Boost）"></a>追加训练法（Additive Training，Boost）</h4><p>其核心思想为，在保持$T<em>1, T_2,…,T</em>{k-1}$不变的情况下，训练$T_k$，其表示方法如下：</p>
+<p>$(1)\;\hat{y}^{(0)}=0$，算法初始化</p>
+<p>$(2)\;\hat{y}^{(1)}=f_1(x)$，训练第一棵树</p>
+<p>$(3)\;\hat{y}^{(2)}=f_1(x)+f_2(x)=\hat{y}^{(1)}+f_2(x)$，训练第二棵树，同时保持第一棵树保持不变</p>
+<p>$(4)\;\hat{y}^{(t)} = \sum\limits_{i=1}^{t-1}f_i(x)+f_t(x)=\hat{y}^{(t-1)}+f_t(x)$，训练第$t$棵树，同时保持前$t-1$棵保持不变</p>
+<p>假设此时对第$t$棵树保持不变，则损失函数为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+Obj^{(t)}&=\sum\limits_{i=1}^{n}l(y_i,\hat{y_i}^{(t)})+\sum\limits_{i=1}^{t}\Omega(f_i)\\
+&=\sum\limits_{i=1}^{n}l(y_i,\hat{y_i}^{(t-1)}+f_t(x_i))+\Omega(f_t)+constant
+\end{aligned}</script><p>将$\hat{y_i}^{(t-1)}$看做变量$x$，$f_t(x_i)$看做$\Delta x$，则利用$Taylor$展开公式，可得到：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+Obj^{(t)}
+&=\sum\limits_{i=1}^{n}l(y_i,\hat{y_i}^{(t-1)}+f_t(x_i))+\Omega(f_t)+constant\\
+&=\sum\limits_{i=1}^{n}[l(y_i,\hat{y_i}^{(t-1)})+g_{i}f_t(x_i)+\frac{1}{2} h_if_t^2(x_i)]+\Omega(f_t)+constant\\
+&=\sum\limits_{i=1}^{n}[g_{i}f_t(x_i)+\frac{1}{2} h_if_t^2(x_i)]+\Omega(g_t)+constant
+\end{aligned}
+\end{equation}</script><p>其中，$\sum\limits_{i=1}^{n}l(y_i,\hat{y_i}^{(t-1)})$为一个常量，因此可以省略，$g_i$和$h_i$分别对应一阶偏导和二阶偏导：</p>
+<script type="math/tex; mode=display">
+g_i = \frac{\partial l(y_i,\hat{y}^{(t-1)})}{\hat{y}^{(t-1)}}\\
+h_i = \frac{\partial^{2} l(y_i,\hat{y}^{(t-1)})}{\hat{y}^{(t-1)}}\\</script><p>因为常量$constant$可以省略，因此我们可以优化一个新的目标函数：</p>
+<script type="math/tex; mode=display">
+Obj^{(t)}=\sum\limits_{i=1}^{n}[g_{i}f_t(x_i)+\frac{1}{2} h_if_t^2(x_i)]+\Omega(g_t)</script><h4 id="复杂度函数-Omega-f-t-的引入"><a href="#复杂度函数-Omega-f-t-的引入" class="headerlink" title="复杂度函数$\Omega(f_t)$的引入"></a>复杂度函数$\Omega(f_t)$的引入</h4><p>假设待训练的第$t$棵树有$T$个叶子节点，叶子节点的输出向量表示为$[w_1,w_2,…,w_T]$，那么$f_t(x)$可以表示为如下形式：</p>
+<script type="math/tex; mode=display">
+f_t(x)=w_{q(x)},w\in R^T,q(x):R^d\rightarrow \{1,2,...,T\}</script><p>在$XGBoost$中，复杂度函数$\Omega(f_t)$的定义如下：</p>
+<script type="math/tex; mode=display">
+\Omega(f_t)=\gamma T+\frac{1}{2}\lambda \sum\limits_{j=1}^{T}w_{j}^2</script><p>则目标函数的推导如下：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+Obj^{(t)}
+&=\sum\limits_{i=1}^{n}[g_{i}f_t(x_i)+\frac{1}{2} h_if_t^2(x_i)]+\gamma T+\frac{1}{2}\lambda \sum\limits_{j=1}^{T}w_{j}^2\\
+&=\sum\limits_{i=1}^{n}[g_iw_{q(x_i)}+\frac{1}{2}h_iw_{q(x_i)}^{2}]+\gamma T+\frac{1}{2}\lambda \sum\limits_{j=1}^{T}w_{j}^2\\
+&=\sum\limits_{j=1}^{T}[(\sum\limits_{i\in I_j}g_i)w_j+\frac{1}{2}\sum\limits_{i\in I_j}h_iw_j^2]+\gamma T+\frac{1}{2}\lambda \sum\limits_{j=1}^{T}w_{j}^2\\
+&=\sum\limits_{j=1}^{T}[(\sum\limits_{i\in I_j}g_i)w_j+\frac{1}{2}(\sum\limits_{i\in I_j}h_i+\lambda) w_{j}^2]+\gamma T\\
+\end{aligned}
+\end{equation}</script><p>定义$G<em>j=\sum\limits</em>{i\in I<em>j}$，$H_j=\sum\limits</em>{i\in I_j}h_i$，则上式变为：</p>
+<script type="math/tex; mode=display">
+Obj^{(t)}=\sum\limits_{j=1}^{T}[G_jw_j+\frac{1}{2}(H_j+\lambda) w_{j}^2]+\gamma T\\</script><p>对上式看做T个相互独立的二次函数的累加，则求目标函数最小等价于求每个二次函数的最小。当H_i&gt;0，可求得：</p>
+<script type="math/tex; mode=display">
+w_j^*=-\frac{G_i}{H_i+\lambda}\\
+Obj_{min}^{(t)} = -\frac{1}{2}\sum\limits_{j=1}^{T}(\frac{G_j^2}{H_j+\lambda})+\gamma T\\</script><p>举个例子，假设要求解第一棵树$T<em>1$的结构如下，各个样本按照该树的结构，会被映射到相应的位置，得到每个样本 $x_i$ 对应的$g_i,h_i$，就可以求得到相应的$Obj</em>{min}^{(1)}$</p>
+<p><img src="GBDT.assets/GBDT.jpg" alt="GBDT" style="zoom:67%;" /></p>
+<p>$g_i,h_i$为前文定义损失函数$l(y_i,\hat{y}^{(t-1)})$对$\hat{y}^{(t)}$的一阶偏导数和二阶偏导数，则当损失函数定义为平方差损失，则可得到：</p>
+<script type="math/tex; mode=display">
+g_i = \frac{\partial (y_i-\hat{y}^{(t-1)})^2}{\hat{y}^{(t-1)}}=-2(y_i-\hat{y}^{(t-1)})\\
+h_i = \frac{\partial^{2} (y_i-\hat{y}^{(t-1)})^2}{\hat{y}^{(t-1)}}=2\\</script><p>所以对于待训练的新树而言，可以根据已经训练好的树预先计算$g_i,h_i$，枚举所有可能的新树的结构，选择目标函数最小的那棵树，同时使用$w_j^*=-\frac{G_i}{H_i+\lambda}$求得该树每个叶子节点的输出值。然而，枚举所有的树是不现实的，因为样本特征值可能是连续的，树的结构可能是无穷的。</p>
+<h4 id="贪心法求解树"><a href="#贪心法求解树" class="headerlink" title="贪心法求解树"></a>贪心法求解树</h4><p>在XGboost中利用贪心法求解树，其算法描述如下：</p>
+<ol>
+<li><p>初始化树，深度为0；</p>
+</li>
+<li><p>对于每个叶子节点，尝试分裂该节点，分裂后的增益为</p>
+<script type="math/tex; mode=display">
+Gain=\frac{1}{2}[\frac{G_L^2}{H_L+\lambda}+\frac{G_R^2}{H_R+\lambda}-\frac{(G_L+G_R)^2}{H_L+H_R+\lambda}]-\lambda</script><p>该公式定义了，分裂后左右子树的新增得分减去不分裂时候节点得分，再减去因为新增一个节点增加的复杂度。</p>
+</li>
+</ol>
+<p>那么如何定义最佳分裂点：</p>
+<ul>
+<li>对于每个叶子节点，枚举所有的特征</li>
+<li>对每个特征，把映射到该叶节点的样本按照该特征值排序</li>
+<li>使用线性扫描来决定最佳分裂点 $O(nKd\log n)$，其中$n$为样本数量，$K$为树深度，$d$为特征数量</li>
+<li>在所有枚举的特征中，选择最优的分裂</li>
+</ul>
+<h3 id="总结算法流程"><a href="#总结算法流程" class="headerlink" title="总结算法流程"></a>总结算法流程</h3><ol>
+<li>迭代生成树$T_i$；</li>
+<li>迭代初始，利用训练好的树$T<em>1,T_2,…,T</em>{i-1}$，计算$g_i,h_i$；</li>
+<li>以$Obj<em>{min}^{(t)} = -\frac{1}{2}\sum\limits</em>{j=1}^{T}(\frac{G_j^2}{H_j+\lambda})+\gamma T $为目标函数，利用贪心算法求得$T_i$；</li>
+<li>新增数后，模型表示为$\hat{y}^{(t)}=\hat{y}^{(t-1)}+f_t(x)$，实践中，可使用$\hat{y}^{(t)}=\hat{y}^{(t-1)}+\epsilon f_t(x)$代替上式，其中$\epsilon$表示步长。</li>
+</ol>
+<p><em>本文参考<a href="https://zhuanlan.zhihu.com/p/30339807，主要强化记忆，规划知识。" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30339807，主要强化记忆，规划知识。</a></em></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>zhihuaT</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://yoursite.com/2020/07/01/GBDT/">http://yoursite.com/2020/07/01/GBDT/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E5%86%B3%E7%AD%96%E6%A0%91%EF%BC%8C%E5%8E%9F%E7%90%86/"># 决策树，原理</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/08/The%20principle%20of%20Generative%20Adversarial%20Networks/">The principle of Generative Adversarial Networks</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© zhihuaT | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
