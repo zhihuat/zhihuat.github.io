@@ -1,241 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
+
+
+
+
+
 <head>
-    <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="zhihuaT">
+  <meta name="keywords" content="">
+  <title>BicycleGAN论文 - zhihuaT</title>
 
-    <meta name="author" content="zhihuaT">
-
-
-
-
-
-<title>BicycleGAN论文 | zhihuaT</title>
-
-
-
-    <link rel="icon" href="/favicon.ico">
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
 
 
-    <!-- stylesheets list from _config.yml -->
-    
-    <link rel="stylesheet" href="/css/style.css">
-    
+<!-- 主题依赖的图标库，不要自行修改 -->
 
-
-
-    <!-- scripts list from _config.yml -->
-    
-    <script src="/js/script.js"></script>
-    
-    <script src="/js/tocbot.min.js"></script>
-    
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_yg9cfy8wd6.css">
 
 
 
-    
-    
-        
-            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-    });
-</script>
-<!-- 给MathJax元素添加has-jax class -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<!-- 通过连接CDN加载MathJax的js代码 -->
-<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_pjno9b9zyxs.css">
 
 
-        
-    
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
 
 
+  <script  src="/js/utils.js" ></script>
 <meta name="generator" content="Hexo 4.2.0"></head>
+
+
 <body>
-    <div class="wrapper">
-        <header>
-    <nav class="navbar">
-        <div class="container">
-            <div class="navbar-header header-logo"><a href="/">zhihuaT</a></div>
-            <div class="menu navbar-right">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
-                    <a class="menu-item" href="/category">Categories</a>
-                
-                    <a class="menu-item" href="/tag">Tags</a>
-                
-                    <a class="menu-item" href="/about">About</a>
-                
-                <input id="switch_default" type="checkbox" class="switch_default">
-                <label for="switch_default" class="toggleBtn"></label>
-            </div>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Fluid</strong>&nbsp;</a>
 
-        </div>
-    </nav>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-    
-    <nav class="navbar-mobile" id="nav-mobile">
-        <div class="container">
-            <div class="navbar-header">
-                <div>
-                    <a href="/">zhihuaT</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
-                </div>
-                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
-            </div>
-            <div class="menu" id="mobile-menu">
-                
-                    <a class="menu-item" href="/archives">Posts</a>
-                
-                    <a class="menu-item" href="/category">Categories</a>
-                
-                    <a class="menu-item" href="/tag">Tags</a>
-                
-                    <a class="menu-item" href="/about">About</a>
-                
-            </div>
-        </div>
-    </nav>
-
-</header>
-<script>
-    var mobileBtn = function f() {
-        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
-        var mobileMenu = document.getElementById("mobile-menu");
-        if(toggleMenu.classList.contains("active")){
-           toggleMenu.classList.remove("active")
-            mobileMenu.classList.remove("active")
-        }else{
-            toggleMenu.classList.add("active")
-            mobileMenu.classList.add("active")
-        }
-    }
-</script>
-        <div class="main">
-            <div class="container">
-    
-    
-        <div class="post-toc">
-    <div class="tocbot-list">
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                Home
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                Archives
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                Categories
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                Tags
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                About
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;&nbsp;</a>
+          </li>
+        
+      </ul>
     </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
+  </div>
+</nav>
+
+    <div class="view intro-2" id="background" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="container text-center white-text fadeInUp">
+            <span class="h2" id="subtitle">
+              
+            </span>
+
+            
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2019-07-23 12:41">
+      July 23, 2019 pm
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
 </div>
 
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
-
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
-
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-    
-
-    
-    <article class="post-wrap">
-        <header class="post-header">
-            <h1 class="post-title">BicycleGAN论文</h1>
             
-                <div class="post-meta">
-                    
-                        Author: <a itemprop="author" rel="author" href="/">zhihuaT</a>
-                    
+          </div>
 
-                    
-                        <span class="post-time">
-                        Date: <a href="#">July 23, 2019&nbsp;&nbsp;12:41:10</a>
-                        </span>
-                    
-                    
-                </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
             
-        </header>
-
-        <div class="post-content">
-            <p>最近看了关于 <strong>BicycleGAN</strong> 的一篇论文，在此将自己看论文的收获记录于此。因为阅读该篇论文是算本人的一个任务，所以看的比较详细，下面写的也非常详细，基本上是按照论文的逻辑写下来的。如果仅仅是想大致了解什么是<strong>BicycleGAN</strong>，可以看其他人的介绍，我的博客中仅看最后一部分即可，是我研究代码后得出的网络结构。</p>
+            <article class="markdown-body">
+              <p>最近看了关于 <strong>BicycleGAN</strong> 的一篇论文，在此将自己看论文的收获记录于此。因为阅读该篇论文是算本人的一个任务，所以看的比较详细，下面写的也非常详细，基本上是按照论文的逻辑写下来的。如果仅仅是想大致了解什么是<strong>BicycleGAN</strong>，可以看其他人的介绍，我的博客中仅看最后一部分即可，是我研究代码后得出的网络结构。</p>
 <a id="more"></a>
 <p>最近看过一篇论文<a href="https://arxiv.org/pdf/1711.11586.pdf" target="_blank" rel="noopener">Toward multimodal Image-to-Image translation</a>，讲述的主要是关于 <strong>BicycleGAN</strong> 的生成式对抗网络模型。在网上也看到过一些相关的博客，但讲得不算深入。因此在此将自己看论文的收获记录于此。</p>
 <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>一般的生成式对抗网络，为单模态的。也就是给你一个真实的图片(ground truth)，网络的任务是生成与该图片非常接近的图片，不管是在颜色上，形状上还是其他方面。 而 <strong>BicycleGAN</strong> 的不同之处在于，该网络生成的图片不求与原图片完全相同，但求在生成的图像判断为真实图像的情况下，可以与原图像有风格上的差异。如果以环境图像为例的话可以参看下图</p>
-<p><img src="BicycleGAN.assets/Figure1.png" alt="Figure1" style="zoom:67%;" /></p>
+<p><img src="BicycleGAN.assets/Figure1.png" srcset="/img/loading.gif" alt="Figure1" style="zoom:67%;" /></p>
 <p>其中，真实的图像为一个夜景。而我们的目的是生成与该场景对应的白天的图像。我们要求白天的图像是多元的，但同时要求它看上去是真实的。</p>
 <blockquote>
 <p>我们可以自己先考虑一下，如何才能让最后的输出变得多元？那就是在对生成器输入的时候加入噪声。那么应该怎么加噪声，以及应该加什么样的噪声呢，可以继续往下看。</p>
@@ -245,7 +218,7 @@
 <ul>
 <li><strong>cVAE-GAN (Conditional Variational Autoencoder GAN): </strong> 一个方法是先将真实图像(Groud truth) 利用编码器映射到潜在空间，得到一个条件噪声 $Q(z|B)$。然后将其和输入图像一起送入到生成器中进行训练，得到输出图像。为了确保  $Q(z|B)$  的随机性，我们利用<a href="https://www.cnblogs.com/nlpowen/p/3620470.html" target="_blank" rel="noopener">KL距离</a>来将其与正态分布进行比较，计算其损失。</li>
 <li><strong>cLR-GAN (Conditional Latent Regressor GAN): </strong> 另一个方法先提供一个随机的潜在向量，将其与输入图像一起送入生成器，得到生成图像。然后利用一个编码器将生成图像恢复为初始的随机向量。这个生成的向量和一开始随机的潜在向量之间存在一个损失。</li>
-<li><strong>BicycleGAN: </strong> 将以上两个模型结合得到我们的模型。（真的是直接框起来了……，结合起来后变成一个什么网络结构也没画出来。当时看的要吐血。但研究代码后，我终于弄清楚了，在后面给出。先给原论文中的图）<br><img src="BicycleGAN.assets/Figure2.png" alt="Figure2" style="zoom:67%;" /></li>
+<li><strong>BicycleGAN: </strong> 将以上两个模型结合得到我们的模型。（真的是直接框起来了……，结合起来后变成一个什么网络结构也没画出来。当时看的要吐血。但研究代码后，我终于弄清楚了，在后面给出。先给原论文中的图）<br><img src="BicycleGAN.assets/Figure2.png" srcset="/img/loading.gif" alt="Figure2" style="zoom:67%;" /></li>
 </ul>
 <h3 id="多模态图像到图像的转换"><a href="#多模态图像到图像的转换" class="headerlink" title="多模态图像到图像的转换"></a>多模态图像到图像的转换</h3><p>我们的目标是在两个数据域之间学习一个多模态的映射。考虑输入域 $\mathcal{A} \subset \mathbb{R}^{H \times W  \times 3}$ ，它被映射到输出域 $\mathcal{B} \subset \mathbb{R}^{H \times W  \times 3}$ 。在训练过程中，我们的数据集是来自这两个数域的成对的数据,  $\left{ A \subset \mathcal{A}, B \subset\mathcal{B} \right}$ 。事实上，对于输入 $A$ ，可能有很多实例 $B$ 与其对应，但我们的训练数据集仅包含这样的一对数据。而我们的模型，是为了在输入一个新的实例 $A$ 的情况下，可以生成一个 $\hat{\mathcal{B}}$ ,其中包含多个可能的 $\hat{B}$ ，分别对应着不同的 $p(B|A)$ 。</p>
 <p>虽然条件生成式对抗网络$(CGANs$) 在图像-图像转换任务取得了成功，但对入输入图像$A$，它受限于仅生成单个（确定）的图像 $\hat{B}$。在前面我们提到，我们先学习一个低维的潜在空间$z\in\mathbb{R}^Z$,它包含了输出模式中一些非常模糊的方面，像$Figure1$中的云层，光线等等，这些在输入图像中并不能直接体现出来。因此我们便可以将一张夜景的图像映射为具有不同云层，不同光线的图像。然后我们再学习一个确定性的映射$G:(A,z)\to B$,为了实现随机抽样，我们希望从先验分布$p(z)$中抽取潜在向量$z$,在这个过程中，使用标准正态分布$\mathscr{N}(0,I)$。</p>
@@ -273,75 +246,275 @@ G^*,E^*=arg \ min_{G,E}\  max_D\   \ {\mathcal L_{GAN}(G,D )+\lambda_{latent} \m
 <h4 id="4-OurHybridModel-BicycleGAN"><a href="#4-OurHybridModel-BicycleGAN" class="headerlink" title="4.OurHybridModel: BicycleGAN"></a>4.OurHybridModel: BicycleGAN</h4><p>将<strong>cVAE-GAN</strong>和<strong>cLR-GAN</strong>组合为混合模型，得到我们的模型<strong>BicycleGAN</strong>。对于<strong>cVAE-GAN</strong>，网络是从实际数据中学习的，但随机向量$z$在测试时可能无法产生逼真的图像—$KL$损失可能无法很好地优化。 更重要的是，判别器$D$在训练期间得不到前面采样的信息（因为$Q(z|B)$是先验分布，而不是随机抽样得来的）。在<strong>cLR-GAN</strong>中，随机向量$z$很容易从简单的分布中采样，但是生成器在训练过程中没有得到真实图像的输入对其的优化（可对比cVAE-GAN来看）。将这两个模型结合起来，可以同时具备这两个循环（$\hat{B}\to z\to\hat{B}$， $z\to \hat{B} \to \hat{z}$）的优势。总的损失为：</p>
 <script type="math/tex; mode=display">
 G^*,E^*=arg \ min_{G,E}\  max_D\  \  \mathcal{ L}^{VAE}_{GAN}(G,D,E)+\lambda\mathcal{L}_1^{VAE}(G) +\mathcal L_{GAN}(G,D )+\lambda_{latent} \mathcal{L}_1^{latent}(G,E) +\lambda_{KL} \mathcal{L}_{KL}(E)\tag{9}</script><p>论文的内容到此就结束了。接下来主要是我研究代码后学到的一些内容。因为论文中具体的网络结构并不清楚，在看完代码后才理清了思路。并且利用TensorFlow画出来graph来。(GitHub上论文的<a href="https://github.com/gitlimlab/BicycleGAN-Tensorflow" target="_blank" rel="noopener">TensorFlow版本代码</a>，原作为<a href="https://github.com/junyanz/BicycleGAN" target="_blank" rel="noopener">PyTorch版本</a>)</p>
-<p>我自己看PyTorch版本代码画出的结构图（尽力了，呼……）<br><img src="BicycleGAN.assets/net.png" alt="net" style="zoom:67%;" /></p>
+<p>我自己看PyTorch版本代码画出的结构图（尽力了，呼……）<br><img src="BicycleGAN.assets/net.png" srcset="/img/loading.gif" alt="net" style="zoom:67%;" /></p>
 <p>利用Tensorboard画的graph</p>
-<p><img src="BicycleGAN.assets/graph.png" alt="graph" style="zoom:67%;" /></p>
+<p><img src="BicycleGAN.assets/graph.png" srcset="/img/loading.gif" alt="graph" style="zoom:67%;" /></p>
 
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/">生成式对抗网络</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/07/25/InfoGAN/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">InfoGAN 论文</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2019/07/23/my%20first%20blog/">
+                        <span class="hidden-mobile">My first blog!!!</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
+            </div>
+
+            
+          </div>
         </div>
-
-        
-            <section class="post-copyright">
-                
-                    <p class="copyright-item">
-                        <span>Author:</span>
-                        <span>zhihuaT</span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>Permalink:</span>
-                        <span><a href="http://yoursite.com/2019/07/23/BicycleGAN/">http://yoursite.com/2019/07/23/BicycleGAN/</a></span>
-                    </p>
-                
-                
-                    <p class="copyright-item">
-                        <span>License:</span>
-                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
-                    </p>
-                
-                
-
-            </section>
-        
-        <section class="post-tags">
-            <div>
-                <span>Tag(s):</span>
-                <span class="tag">
-                    
-                    
-                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"># 深度学习</a>
-                    
-                        <a href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E5%AF%B9%E6%8A%97%E7%BD%91%E7%BB%9C/"># 生成式对抗网络</a>
-                    
-                        
-                </span>
-            </div>
-            <div>
-                <a href="javascript:window.history.back();">back</a>
-                <span>· </span>
-                <a href="/">home</a>
-            </div>
-        </section>
-        <section class="post-nav">
-            
-                <a class="prev" rel="prev" href="/2019/07/25/InfoGAN/">InfoGAN 论文</a>
-            
-            
-            <a class="next" rel="next" href="/2019/07/23/my%20first%20blog/">My first blog!!!</a>
-            
-        </section>
-
-
-    </article>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
 </div>
 
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+  </main>
+
+  
+    <a id="scroll-top-button" href="#" role="button">
+      <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+    </a>
+  
+
+  
+    <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
         </div>
-        <footer id="footer" class="footer">
-    <div class="copyright">
-        <span>© zhihuaT | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
+  </div>
+</div>
+  
+
+  
+
+  
+
+  <footer class="mt-5">
+  <div class="text-center py-3">
+    <div>
+      <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a>
+      <i class="iconfont icon-love"></i>
+      <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener">
+        <span>Fluid</span></a>
+    </div>
+    
+
+    
+
+    
+  </div>
 </footer>
 
-    </div>
+<!-- SCRIPTS -->
+<script  src="https://cdn.staticfile.org/jquery/3.4.1/jquery.min.js" ></script>
+<script  src="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/main.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  <script defer src="https://cdn.staticfile.org/clipboard.js/2.0.6/clipboard.min.js" ></script>
+  <script  src="/js/clipboard-use.js" ></script>
+
+
+
+
+
+
+
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
+  <script>
+    var typed = new Typed('#subtitle', {
+      strings: [
+        '  ',
+        "BicycleGAN论文&nbsp;",
+      ],
+      cursorChar: "_",
+      typeSpeed: 70,
+      loop: false,
+    });
+    typed.stop();
+    $(document).ready(function () {
+      $(".typed-cursor").addClass("h2");
+      typed.start();
+    });
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    var path = "/local-search.xml";
+    var inputArea = document.querySelector("#local-search-input");
+    inputArea.onclick = function () {
+      searchFunc(path, 'local-search-input', 'local-search-result');
+      this.onclick = null
+    }
+  </script>
+
+
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
