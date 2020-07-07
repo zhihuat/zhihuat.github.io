@@ -211,14 +211,14 @@
 <li>生成式对抗网络的提出过程不仅仅是简单的想出让两个网络相互博弈的过程. </li>
 <li>生成器和判别器, 为什么最后的结果是生成器达到最强(可以生成以假乱真的图像), 而不是判别器达到最强(可以将真假图像完全区分出来)?</li>
 </ol>
-<h2 id="Basic-idea-of-GAN"><a href="#Basic-idea-of-GAN" class="headerlink" title="Basic idea of GAN"></a>Basic idea of GAN</h2><p>虽然算法最后生成的是与真实图像几乎没有区别的样本, 但实际上生成器得到的是一个分布 $P<em>{G}(x)$. 我们的目标是想让 $P</em>{G}(x)$ 尽可能的接近数据的真实分布$P_{data}(x)$.</p>
+<h2 id="Basic-idea-of-GAN"><a href="#Basic-idea-of-GAN" class="headerlink" title="Basic idea of GAN"></a>Basic idea of GAN</h2><p>虽然算法最后生成的是与真实图像几乎没有区别的样本, 但实际上生成器得到的是一个分布 $P_{G}(x)$. 我们的目标是想让 $P_{G}(x)$ 尽可能的接近数据的真实分布$P_{data}(x)$.</p>
 <h3 id="KL-divergence"><a href="#KL-divergence" class="headerlink" title="$KL$ divergence"></a>$KL$ divergence</h3><p>在测度论中, 如果我们想要衡量具有同一随机变量的两个独立的概率分布$P(x)$和$Q(x)$的差异, 我们可以用$KL$散度来进行计算:</p>
 <script type="math/tex; mode=display">
 D_{KL}(P\parallel Q)=\mathit{E}_{x\backsim P(x)}[log\frac{P(x)}{Q(x)}]=\mathit{E}_{x\backsim P(x)}[log P(x)-log Q(x)]</script><p>$KL$散度有很多有用的性质, 最重要的是它是非负的. $KL$散度为0,  当且仅当$P(x)$和$Q(x)$在离散型变量的情况下是相等的, 或在连续型变量的情况下<strong>几乎处处</strong>相等. </p>
-<p>然而, 他有一个缺点那就是非对称的, 这意味着选择$D<em>{KL}(P\parallel Q)$还是$D</em>{KL}(Q\parallel P)$影响很大.</p>
+<p>然而, 他有一个缺点那就是非对称的, 这意味着选择$D_{KL}(P\parallel Q)$还是$D_{KL}(Q\parallel P)$影响很大.</p>
 <p>$KL$散度可以由极大似然估计来导出.</p>
-<p>给定一个样本数据的分布$P<em>{data}(x)$和生成的数据分布$P</em>{G}(x;\theta)$, 我们希望GAN可以找到一组参数$\theta$, 使分布$P<em>{data}(x)$和$P</em>{G}(x;\theta)$之间的距离最短, 从而生成器可以生成十分逼真的图像.</p>
-<p>首先我们从$P<em>{data}(x)$中抽取m个真实样本${x</em>{1},x<em>{2},\dots ,x</em>{m}}$, 可以计算$P<em>{G}(x</em>{i};\theta)$为在由$\theta$生成的分布中, $x_{i}$样本所出现的概率. 因此, 构造似然函数:</p>
+<p>给定一个样本数据的分布$P_{data}(x)$和生成的数据分布$P_{G}(x;\theta)$, 我们希望GAN可以找到一组参数$\theta$, 使分布$P_{data}(x)$和$P_{G}(x;\theta)$之间的距离最短, 从而生成器可以生成十分逼真的图像.</p>
+<p>首先我们从$P_{data}(x)$中抽取m个真实样本$\{x_{1},x_{2},\dots ,x_{m}\}$, 可以计算$P_{G}(x_{i};\theta)$为在由$\theta$生成的分布中, $x_{i}$样本所出现的概率. 因此, 构造似然函数:</p>
 <script type="math/tex; mode=display">
 L=\prod_{i=1}^{m}P_{G}(x_{i};\theta)</script><p>下面我们最大化似然函数来求得参数$\theta$:</p>
 <script type="math/tex; mode=display">
@@ -230,8 +230,8 @@ L=\prod_{i=1}^{m}P_{G}(x_{i};\theta)</script><p>下面我们最大化似然函�
 =&\arg\max\limits_{\theta}\int_{x}P_{data}(x)\log P_{G}(x;\theta)dx-\int_{x}P_{data}(x)\log P_{data}(x)dx\\
 =&\arg\min\limits_{\theta}\int_{x}P_{data}(x)[\log P_{data}(x)-\log P_{G}(x;\theta)]dx\\
 =&\arg\min\limits_{\theta}KL(P_{data}(x)\parallel P_{G}(x))
-\end{aligned}</script><p>从上式中可以看出, 如果想要找到最优的参数$\theta$, 我们需要找到$P<em>{data}(x)$与$ P</em>{G}(x)$之间的$KL$散度. 但在实际操作中, 这是做不到的. 因为我们即使是真实的分布$ P<em>{data}(x)$也写不出来,跟不用说$ P</em>{G}(x)$.</p>
-<h3 id="The-advantage-of-GAN"><a href="#The-advantage-of-GAN" class="headerlink" title="The advantage of GAN"></a>The advantage of GAN</h3><p>既然我们求不出$P<em>{data}(x)$与$ P</em>{G}(x)$之间的$KL$散度, GAN就想出了一个办法来替代这两个分布之间的差异, 那就是引入判别器$Discriminator$. 利用机器学习的思想, 判别器可以一步步的增强, 以更好的对两个分布之中的样本进行区分.</p>
+\end{aligned}</script><p>从上式中可以看出, 如果想要找到最优的参数$\theta$, 我们需要找到$P_{data}(x)$与$ P_{G}(x)$之间的$KL$散度. 但在实际操作中, 这是做不到的. 因为我们即使是真实的分布$ P_{data}(x)$也写不出来,跟不用说$ P_{G}(x)$.</p>
+<h3 id="The-advantage-of-GAN"><a href="#The-advantage-of-GAN" class="headerlink" title="The advantage of GAN"></a>The advantage of GAN</h3><p>既然我们求不出$P_{data}(x)$与$ P_{G}(x)$之间的$KL$散度, GAN就想出了一个办法来替代这两个分布之间的差异, 那就是引入判别器$Discriminator$. 利用机器学习的思想, 判别器可以一步步的增强, 以更好的对两个分布之中的样本进行区分.</p>
 <p>而要想得到一个比较好生成器$G$和判别器$D$, 我们需要对下面这一式子进行优化:</p>
 <script type="math/tex; mode=display">
 G^{*},D^{*}=\min\limits_{\theta}\max\limits_{\theta}V(G,D)</script><p>首先我们需要定义一个判别器$D$以判别样本是不是从$P_{data}$分布中取出来, 因此有:</p>
@@ -253,24 +253,24 @@ G^{*}=\arg\min V(G,D_{G}^{*})</script><h3 id="Theoretical-Analysis"><a href="#Th
 <script type="math/tex; mode=display">
 V(G,D):=\mathit{E}_{x\sim p_{data}(x)}\log(D(x))+\mathit{E}_{x\sim p_{G}(x)}\log(1-D(x)</script><p>将价值函数展开为积分形式:</p>
 <script type="math/tex; mode=display">
-V(G,D) =\int_{x }p_{data}(x)\log D(x)-p_{g}(x)\log (1-D(x))dx</script><p>如果我们想要令$V(G,D)$达到做大, 则只需要上他的积分函数达到最大. 即, 找到最优的$D(x)$, 令 $p<em>{data}(x)\log D(x)-p</em>{g}(x)\log (1-D(x))$ 达到最大. </p>
+V(G,D) =\int_{x }p_{data}(x)\log D(x)-p_{g}(x)\log (1-D(x))dx</script><p>如果我们想要令$V(G,D)$达到做大, 则只需要上他的积分函数达到最大. 即, 找到最优的$D(x)$, 令 $p_{data}(x)\log D(x)-p_{g}(x)\log (1-D(x))$ 达到最大. </p>
 <p>将$D(x)$看做变量, 利用求导求极值的放法,可以求得当:</p>
 <script type="math/tex; mode=display">
 D^{*}(x)=\frac{P_{data}(x)}{P_{data}(x)+P_{G}(x)}</script><p> 时, $V(G,D)$最大. 且此极大值是唯一的.</p>
 <p>在实际计算中, $D(x)$是不可计算的, 因为我们并不知道先验的$P_{data}(x)$, 但在数学上证明了了他的存在. 并且这可以帮我们证明最优$G$也是存在的.</p>
-<h4 id="Finding-the-Best-Generator"><a href="#Finding-the-Best-Generator" class="headerlink" title="Finding the Best Generator"></a><strong>Finding the Best Generator</strong></h4><p>GAN的目标是令$P<em>{G}(x)=P</em>{data}(x)$, 当我们将其代入最优$D(x)$的表达式中, 可以得到</p>
+<h4 id="Finding-the-Best-Generator"><a href="#Finding-the-Best-Generator" class="headerlink" title="Finding the Best Generator"></a><strong>Finding the Best Generator</strong></h4><p>GAN的目标是令$P_{G}(x)=P_{data}(x)$, 当我们将其代入最优$D(x)$的表达式中, 可以得到</p>
 <script type="math/tex; mode=display">
-D_{G}^{*}=\frac{P_{data}(x)}{P_{data}(x)+P_{G}(x)}=\frac{1}{2}</script><p>即判别样本来自$P<em>{data}(x)$和$P</em>{G}(x)$的概率都为$\frac{1}{2}$, 也就意味这判别器已经完全分不清真假图像了.(前面思考2的原因)</p>
+D_{G}^{*}=\frac{P_{data}(x)}{P_{data}(x)+P_{G}(x)}=\frac{1}{2}</script><p>即判别样本来自$P_{data}(x)$和$P_{G}(x)$的概率都为$\frac{1}{2}$, 也就意味这判别器已经完全分不清真假图像了.(前面思考2的原因)</p>
 <p>基于这一观点, Ian Goodfellow 证明了$G$就是极大极小博弈的解. 以下我们对其进行证明.</p>
-<p>首先我们反向证明, 即已知$P<em>{G}(x)=P</em>{data}(x)$, 来找$C(G)=\max V(G,D)$的全局最小点.此时:</p>
+<p>首先我们反向证明, 即已知$P_{G}(x)=P_{data}(x)$, 来找$C(G)=\max V(G,D)$的全局最小点.此时:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 V(G,D_{G}^*) =&\int_{x }p_{data}(x)\log \frac{1}{2}-p_{g}(x)\log (1-\frac{1}{2})dx\\
 =&-\log2\int_{x}P_{G}(x)dx-\log2\int_{x}P_{data}(x)dx\\
 =&-2\log2\\
 =&-\log4
-\end{aligned}</script><p>由于只有当$P<em>{G}(x)=P</em>{data}(x)$时该值才会出现, 因此接下来我们从正向证明这个值就是最小值, 也就是满足当且仅当的条件.</p>
-<p>放弃$P<em>{G}(x)=P</em>{data}(x)$的假设,对任意一个$G$, 我们将最优$D^{*}(x)$代入$C(G)=\max V(G,D)$中:</p>
+\end{aligned}</script><p>由于只有当$P_{G}(x)=P_{data}(x)$时该值才会出现, 因此接下来我们从正向证明这个值就是最小值, 也就是满足当且仅当的条件.</p>
+<p>放弃$P_{G}(x)=P_{data}(x)$的假设,对任意一个$G$, 我们将最优$D^{*}(x)$代入$C(G)=\max V(G,D)$中:</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 C(G)=&\int_{x}p_{data}(x)\log\frac{P_{data}(x)}{P_{data}(x)+P_{G}(x)}\\
@@ -295,10 +295,10 @@ C(G)=&-\log4+\int_{x}p_{data}(x)\log\frac{P_{data}(x)}{(P_{data}(x)+P_{G}(x))/2}
 <script type="math/tex; mode=display">
 \begin{aligned}
 C(G)=-\log4+KL(p_{data}\parallel\frac{p_{data}+p_{G}}{2})+KL(p_{data}\parallel\frac{p_{data}+p_{G}}{2})
-\end{aligned}</script><p>$KL$散度是非负的, 因此我们可以得出$-\log4$就是$C(G)$的全局最小值. 接下来即说明$P<em>{G}(x)=P</em>{data}(x)$为唯一的条件. </p>
+\end{aligned}</script><p>$KL$散度是非负的, 因此我们可以得出$-\log4$就是$C(G)$的全局最小值. 接下来即说明$P_{G}(x)=P_{data}(x)$为唯一的条件. </p>
 <p>引入$JS$散度, $JS(P \parallel Q)=\frac{1}{2}KL(P\parallel M)+\frac{1}{2}KL(P\parallel M)$, 其中$M=\frac{1}{2}(P+Q)$. 因此</p>
 <script type="math/tex; mode=display">
-C(G)=-\log4+2\cdot JS(P_{data} \parallel P_{G})</script><p>$JS$散度的取值为$0$到$\log2$,.若两个分布完全没有交集,那么$JS$散度取最大值$\log2$; 若另个分布完全一样, 那么$JS$散度取值为$0$. 因此只有当$P<em>{G}(x)=P</em>{data}(x)$时, $C(G)$取得最小值$-\log4$.</p>
+C(G)=-\log4+2\cdot JS(P_{data} \parallel P_{G})</script><p>$JS$散度的取值为$0$到$\log2$,.若两个分布完全没有交集,那么$JS$散度取最大值$\log2$; 若另个分布完全一样, 那么$JS$散度取值为$0$. 因此只有当$P_{G}(x)=P_{data}(x)$时, $C(G)$取得最小值$-\log4$.</p>
 <p>由此, 最优生成器和判别器的存在性和唯一性得以证明.</p>
 
             </article>
@@ -566,6 +566,7 @@ C(G)=-\log4+2\cdot JS(P_{data} \parallel P_{G})</script><p>$JS$散度的取值�
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
 </body>
 </html>

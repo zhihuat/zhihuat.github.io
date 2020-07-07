@@ -230,7 +230,7 @@ D_{KL}(P(\cdot \vert x)\Vert Q(\cdot \vert x))
 &= \mathbb{E}_{c^{'}\sim P(c|x)}\left[\log\frac{P(c^{'}|x)}{Q(c^{'}|x)} \right] \\
 &=\mathbb{E}_{c^{'}\sim P(c|x)}\left[\log P(c^{'}|x) \right]-\mathbb{E}_{c^{'}\sim P(c|x)}\left[\log Q(c^{'}|x) \right]
 \tag{4}
-\end{align}</script><p>通过上面的处理方法，就绕过了需要后验分布$P(c|x)$的问题。事实上，$H(c)$作为潜在编码的熵也可以进行优化，但本文中将$H(c)$作为常量。通过观察式子我们发现，$c^{‘}$仍然需要从后验分布中进行采样($c^{‘}\sim P(c|x)$），因此作者通过证明$\mathbb{E}<em>{x\sim X, y\sim y|X} \left[f(x,y)\right]=\mathbb{E}</em>{x\sim X, y\sim y|X,x^{‘}\sim X|y} \left[f(x^{‘},y)\right]$，将公式再化为:</p>
+\end{align}</script><p>通过上面的处理方法，就绕过了需要后验分布$P(c|x)$的问题。事实上，$H(c)$作为潜在编码的熵也可以进行优化，但本文中将$H(c)$作为常量。通过观察式子我们发现，$c^{‘}$仍然需要从后验分布中进行采样($c^{‘}\sim P(c|x)$），因此作者通过证明$\mathbb{E}_{x\sim X, y\sim y|X} \left[f(x,y)\right]=\mathbb{E}_{x\sim X, y\sim y|X,x^{‘}\sim X|y} \left[f(x^{‘},y)\right]$，将公式再化为:</p>
 <script type="math/tex; mode=display">
 \begin{align}
 L_1(G,Q) &=E_{x\sim G(z,c)}\left[\mathbb{E}_{c^{'}\sim P(c|x)}\left[\log Q(c^{'}|x)\right] \right]+H(c)\\
@@ -512,6 +512,7 @@ L_1(G,Q) &=E_{x\sim G(z,c)}\left[\mathbb{E}_{c^{'}\sim P(c|x)}\left[\log Q(c^{'}
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
 </body>
 </html>
