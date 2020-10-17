@@ -163,7 +163,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      368 字
+      874 字
     </span>
   
 
@@ -173,7 +173,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      17
        分钟
     </span>
   
@@ -220,6 +220,55 @@ Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
 	$\mathcal&#123;A&#125;$ outputs two neighboring databases $D^&#123;i,0&#125;,D^&#123;i,1&#125; \to \mathit&#123;N&#125;^&#123;|x|&#125; and a mechanism $mathcal&#123;M&#125;_i \to \mathcal&#123;M&#125;$
 	$\mathcal&#123;A&#125;$ receives $y_i&#x3D;\mathcal&#123;M&#125;_i(D^&#123;i,b&#125;)$
 	&#125;
+\end&#123;algorithm&#125;</code></pre>
+<pre><code class="hljs \renewcommand*&#123;\algorithmcfname&#125;&#123;Protocol&#125;">\renewcommand&#123;\algorithmiccomment&#125;[1]&#123;$\triangleright$ #1&#125;
+\begin&#123;algorithm&#125;[tb]
+\caption&#123;Vertical $name$&#125;
+\label&#123;alg:vertical&#125;
+\small
+\KwIn &#123;each $C_i$ inputs feature $x^i &#x3D; \&#123;x^i_&#123;1&#125;, ..., x^i_&#123;n&#125;\&#125;$ \CommentSty&#123;for simplicity, we assume each $C_i$ holds a single feature, 
+%and $C_l$ only holds the labels, 
+hence $m&#x3D;l$&#125;&#125;
+\KwIn &#123;\C_l $ inputs labels $y &#x3D; \&#123;y_1, ..., y_n\&#125;$&#125;
+
+\For(\hfill\CommentSty&#123;for each $C$&#125;)&#123;$i &#x3D; 1 \to l$&#125;&#123;
+$C_i$ sorts $x^i$ and partitions it into $q$ buckets
+
+\For(\hfill \CommentSty&#123;for each sample&#125;)&#123;$j &#x3D; 1 \to n$&#125;&#123;
+%\STATE with probability $\frac&#123;e^&#123;\varepsilon&#125;&#125;&#123;e^&#123;\varepsilon&#125;+d-1&#125;$, $x_&#123;j,i&#125;$ stays in the original bucket;
+$C_i$ moves $x^i_&#123;j&#125;$ to another bucket with probability $\frac&#123;1&#125;&#123;e^&#123;\varepsilon&#125;+q-1&#125;$
+\hfill\CommentSty&#123;add DP noise&#125;
+&#125;
+$C_i$ sends sample &#123;\bf ID&#125;s in each bucket to $C_l$
+&#125;
+
+
+$C_l$ initializes $\&#123;\hat&#123;y&#125;_1, ...,\hat&#123;y&#125;_n\&#125;$ with random values 
+
+\For(\hfill \CommentSty&#123;for each tree&#125;)&#123;$t &#x3D; 1 \to T$&#125;&#123;
+\For(\hfill \CommentSty&#123;for each sample&#125;)&#123;$i &#x3D; 1 \to n$&#125;
+&#123;
+    $C_l$: $g_i\gets \partial_&#123;\hat&#123;y_i&#125;&#125;L(y_i,\hat&#123;y_i&#125;)$, $h_i\gets \partial^2_&#123;\hat&#123;y_i&#125;&#125;L(y_i,\hat&#123;y_i&#125;)$
+&#125;
+
+\For&#123;&#123;\bf each&#125; node in the current tree&#125;&#123;
+
+\For(\hfill \CommentSty&#123;for each feature&#125;)&#123;$i &#x3D; 1 \to m$&#125;&#123;
+\For(\hfill \CommentSty&#123;for each bucket&#125;)&#123;$j &#x3D; 1 \to q$&#125;&#123;
+
+$C_l$ updates $\mathit&#123;bucket&#125;^i_&#123;j&#125;$ \hfill\CommentSty&#123;not for root&#125;
+
+$C_l$: $G^i_&#123;j&#125; \gets  \sum_&#123;k \in \mathit&#123;bucket&#125;^i_&#123;j&#125;&#125;g^i_&#123;j,k&#125;$ $H^i_&#123;j&#125; \gets  \sum_&#123;k \in \mathit&#123;bucket&#125;^i_&#123;j&#125;&#125;h^i_&#123;j,k&#125;$
+&#125;
+$\mathit&#123;score&#125;_i$, $\mathit&#123;split&#125;_i$ $\gets C_l$ runs Algorithm~\ref&#123;alg:split&#125; %for split finding, 
+with inputs $\&#123;G^i_&#123;1&#125;, ..., G^i_&#123;q&#125;\&#125;$, $\&#123;H^i_&#123;1&#125;, ..., H^i_&#123;q&#125;\&#125;$
+&#125;
+for the maximal $\mathit&#123;score&#125;_j$, $C_l$ sends $\mathit&#123;split&#125;_j$ to $C_j$ 
+
+$C_l$ splits the buckets based on $\mathit&#123;split&#125;_j$
+&#125;
+$C_l$ updates $\&#123;\hat&#123;y&#125;_1, ..., \hat&#123;y&#125;_n\&#125;$ based on the weights (cf. equation~\ref&#123;equ:weight&#125;) of the leaf nodes. 
+&#125;
 \end&#123;algorithm&#125;</code></pre>
 <p>With respec</p>
 
