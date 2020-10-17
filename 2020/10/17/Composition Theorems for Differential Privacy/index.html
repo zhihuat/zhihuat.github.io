@@ -17,10 +17,19 @@
   <meta name="description" content="">
   <meta name="author" content="zhihuaT">
   <meta name="keywords" content="">
-  <title>Tags - 会议总结 - zhihuaT</title>
+  <title>Differential Privacy —— Composition Theorems - zhihuaT</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
 
+
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/github-markdown-css/4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    <link  rel="stylesheet" href="https://cdn.staticfile.org/highlight.js/10.0.0/styles/github-gist.min.css" />
+  
+
+  
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -42,7 +51,7 @@
 
 
 <body>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 80vh;">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -140,6 +149,40 @@
             </span>
 
             
+              
+  <div class="mt-3 post-meta">
+    <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+    <time datetime="2020-10-17 08:51">
+      October 17, 2020 am
+    </time>
+  </div>
+
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      372 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      7
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
           
@@ -150,37 +193,96 @@
 
   <main>
     
-      <div class="container nopadding-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">1 posts in total.</p>
-  <hr>
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/07/06/IEEE%20Symposium%20on%20Security%20and%20Privacy%202020/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">IEEE Symposium on Security and Privacy 2020</span>
-      <span style="float: right;">07-06</span>
-    </a>
-  
-</div>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-md">
+      <div class="container nopadding-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <div class="post-content mx-auto" id="post">
+            
+            <article class="markdown-body">
+              <p>This post mainly introduce the composition theorems of differential privacy. It is proposed by Cynthia Dwork in <strong>《Boosting and Differential Privacy》</strong>. It shows that, for achieving ($\epsilon$, $\delta$) differential privacy of $k$-fold composition, the privacy parameter $\epsilon$ degrades as $k \epsilon^2+\sqrt{k}\epsilon$ rather than linearly as $k\epsilon$.</p>
+<a id="more"></a>
+<p>With multiple differentially private mechanisms, we can put them together to construct more complicted private algorithms. But in order to do that, we need to understand how privacy parameters compose.</p>
+<p>Before we begin, we must discuss what exactly we mean by composition. It covers the following two interesting scenarios:</p>
+<ol>
+<li>Repeated use of differentially private algorithms on the same database. This allows both the repeated use of the same mechanism multiple times, as well as the modular construction of differentially private algorithms from basic private building blocks.</li>
+<li>Repeated use of differentially private algorithms on <em>different</em> databases that may nevertheless contain information relating to the same individual. This allows us to reason about the cumulative privacy loss of a single individual whose data might be spread across multiple datasets, each of which may be used indenpendently in a differentially private way.</li>
+</ol>
+<p>Towards this end, we consider the following composition experiment, which takes as input an arbitrary adaptive algorithm $\mathcal{A}$ which we view as the “adversary” trying to break the privacy of some family of database access mechanisms $\mathcal{M}$ (e.g.  the set of all $\epsilon$-defferentially private mechanisms), as well as a parameter $b$ which can take values either 0 or 1.</p>
+<pre><code class="hljs latex">---
+header-includes:
+  - \usepackage&#123;algorithm2e&#125;
+---
+\begin&#123;algorithm&#125;[H]
+\caption&#123;$k$-fold Adaptive Composition Experiment b for an adversary $mathcal&#123;A&#125;$ and a family of database mechanisms $\mathcal&#123;M&#125;$&#125;
+\Compose($\mathca&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
+	\For&#123;$i &#x3D; 1 \to k$&#125;&#123;
+	$\mathcal&#123;A&#125;$ outputs two neighboring databases $D^&#123;i,0&#125;,D^&#123;i,1&#125; \to \mathit&#123;N&#125;^&#123;|x|&#125; and a mechanism $mathcal&#123;M&#125;_i \to \mathcal&#123;M&#125;$
+	$\mathcal&#123;A&#125;$ receives $y_i&#x3D;\mathcal&#123;M&#125;_i(D^&#123;i,b&#125;)$
+	&#125;
+\end&#123;algorithm&#125;</code></pre>
 
-
+            </article>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Differential-Pricacy/">Differential Pricacy</a>
+                    
+                  </div>
+                
               </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" target="_blank" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext row">
+                  <div class="post-prev col-6">
+                    
+                    
+                  </div>
+                  <div class="post-next col-6">
+                    
+                    
+                      <a href="/2020/07/10/How%20Not%20to%20Prove%20Your%20Election%20Outcome/">
+                        <span class="hidden-mobile">How Not to Prove Your Election Outcome</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </div>
+                </div>
+              
             </div>
+
+            
           </div>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div id="tocbot"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
   </main>
 
@@ -258,6 +360,31 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/tocbot/4.11.1/tocbot.min.js" ></script>
+  <script>
+    $(document).ready(function () {
+      var boardCtn = $('#board-ctn');
+      var boardTop = boardCtn.offset().top;
+
+      tocbot.init({
+        tocSelector: '#tocbot',
+        contentSelector: 'article.markdown-body',
+        headingSelector: 'h1,h2,h3,h4,h5,h6',
+        linkClass: 'tocbot-link',
+        activeLinkClass: 'tocbot-active-link',
+        listClass: 'tocbot-list',
+        isCollapsedClass: 'tocbot-is-collapsed',
+        collapsibleClass: 'tocbot-is-collapsible',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        headingsOffset: -boardTop
+      });
+      if ($('.toc-list-item').length > 0) {
+        $('#toc').css('visibility', 'visible');
+      }
+    });
+  </script>
+
 
 
   <script  src="https://cdn.staticfile.org/typed.js/2.0.11/typed.min.js" ></script>
@@ -265,7 +392,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Tag - 会议总结&nbsp;",
+        "Differential Privacy —— Composition Theorems&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
@@ -280,6 +407,21 @@
 
 
 
+  <script  src="https://cdn.staticfile.org/anchor-js/4.2.2/anchor.min.js" ></script>
+  <script>
+    anchors.options = {
+      placement: "right",
+      visible: "hover",
+      
+    };
+    var el = "h1,h2,h3,h4,h5,h6".split(",");
+    var res = [];
+    for (item of el) {
+      res.push(".markdown-body > " + item)
+    }
+    anchors.add(res.join(", "))
+  </script>
+
 
 
   <script  src="/js/local-search.js" ></script>
@@ -293,6 +435,20 @@
   </script>
 
 
+
+  <script  src="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.staticfile.org/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+  <script>
+    $('#post img:not(.no-zoom img, img[no-zoom]), img[zoom]').each(
+      function () {
+        var element = document.createElement('a');
+        $(element).attr('data-fancybox', 'images');
+        $(element).attr('href', $(this).attr('src'));
+        $(this).wrap(element);
+      }
+    );
+  </script>
 
 
 
