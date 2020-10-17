@@ -215,7 +215,7 @@
 <p>Towards this end, we consider the following composition experiment, which takes as input an arbitrary adaptive algorithm $\mathcal{A}$ which we view as the “adversary” trying to break the privacy of some family of database access mechanisms $\mathcal{M}$ (e.g.  the set of all $\epsilon$-defferentially private mechanisms), as well as a parameter $b$ which can take values either 0 or 1.</p>
 <pre><code class="hljs pdflatex">\begin&#123;algorithm&#125;[H]
 \caption&#123;$k$-fold Adaptive Composition Experiment b for an adversary $mathcal&#123;A&#125;$ and a family of database mechanisms $\mathcal&#123;M&#125;$&#125;
-\Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
+Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
 	\For&#123;$i &#x3D; 1 \to k$&#125;&#123;
 	$\mathcal&#123;A&#125;$ outputs two neighboring databases $D^&#123;i,0&#125;,D^&#123;i,1&#125; \to \mathit&#123;N&#125;^&#123;|x|&#125; and a mechanism $mathcal&#123;M&#125;_i \to \mathcal&#123;M&#125;$
 	$\mathcal&#123;A&#125;$ receives $y_i&#x3D;\mathcal&#123;M&#125;_i(D^&#123;i,b&#125;)$
