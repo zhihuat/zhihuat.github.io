@@ -163,7 +163,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      881 字
+      893 字
     </span>
   
 
@@ -213,7 +213,9 @@
 <li>Repeated use of differentially private algorithms on <em>different</em> databases that may nevertheless contain information relating to the same individual. This allows us to reason about the cumulative privacy loss of a single individual whose data might be spread across multiple datasets, each of which may be used indenpendently in a differentially private way.</li>
 </ol>
 <p>Towards this end, we consider the following composition experiment, which takes as input an arbitrary adaptive algorithm $\mathcal{A}$ which we view as the “adversary” trying to break the privacy of some family of database access mechanisms $\mathcal{M}$ (e.g.  the set of all $\epsilon$-defferentially private mechanisms), as well as a parameter $b$ which can take values either 0 or 1.</p>
-<pre><code class="hljs pdfLaTeX">\begin&#123;algorithm&#125;[H]
+<pre><code class="hljs pdfLaTeX">header-includes:
+	- \usepackage&#123;algorithm2e&#125;
+\begin&#123;algorithm&#125;[H]
 \caption&#123;$k$-fold Adaptive Composition Experiment b for an adversary $mathcal&#123;A&#125;$ and a family of database mechanisms $\mathcal&#123;M&#125;$&#125;
 Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
 	\For&#123;$i &#x3D; 1 \to k$&#125;&#123;
@@ -221,7 +223,9 @@ Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
 	$\mathcal&#123;A&#125;$ receives $y_i&#x3D;\mathcal&#123;M&#125;_i(D^&#123;i,b&#125;)$
 	&#125;
 \end&#123;algorithm&#125;</code></pre>
-<pre><code class="hljs pdfLaTeX">\renewcommand*&#123;\algorithmcfname&#125;&#123;Protocol&#125;
+<pre><code class="hljs pdfLaTeX">header-includes:
+	- \usepackage&#123;algorithm2e&#125;
+\renewcommand*&#123;\algorithmcfname&#125;&#123;Protocol&#125;
 \renewcommand&#123;\algorithmiccomment&#125;[1]&#123;$\triangleright$ #1&#125;
 \begin&#123;algorithm&#125;[tb]
 \caption&#123;Vertical $name$&#125;
@@ -495,7 +499,7 @@ $C_l$ updates $\&#123;\hat&#123;y&#125;_1, ..., \hat&#123;y&#125;_n\&#125;$ base
         $(this).wrap(element);
       }
     );
-  </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  </script>
 
 
 
@@ -515,6 +519,22 @@ $C_l$ updates $\&#123;\hat&#123;y&#125;_1, ..., \hat&#123;y&#125;_n\&#125;$ base
 
 
 
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 </html>
