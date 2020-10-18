@@ -163,7 +163,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      368 字
+      2.1k 字
     </span>
   
 
@@ -173,7 +173,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      41
        分钟
     </span>
   
@@ -213,15 +213,83 @@
 <li>Repeated use of differentially private algorithms on <em>different</em> databases that may nevertheless contain information relating to the same individual. This allows us to reason about the cumulative privacy loss of a single individual whose data might be spread across multiple datasets, each of which may be used indenpendently in a differentially private way.</li>
 </ol>
 <p>Towards this end, we consider the following composition experiment, which takes as input an arbitrary adaptive algorithm $\mathcal{A}$ which we view as the “adversary” trying to break the privacy of some family of database access mechanisms $\mathcal{M}$ (e.g.  the set of all $\epsilon$-defferentially private mechanisms), as well as a parameter $b$ which can take values either 0 or 1.</p>
-<pre><code class="hljs latex">\begin&#123;algorithm&#125;[H]
-\caption&#123;$k$-fold Adaptive Composition Experiment b for an adversary $mathcal&#123;A&#125;$ and a family of database mechanisms $\mathcal&#123;M&#125;$&#125;
-Compose($\mathcal&#123;A&#125;, \mathcal&#123;M&#125;,k,b$)
-	\For&#123;$i &#x3D; 1 \to k$&#125;&#123;
-	$\mathcal&#123;A&#125;$ outputs two neighboring databases $D^&#123;i,0&#125;,D^&#123;i,1&#125; \to \mathit&#123;N&#125;^&#123;|x|&#125; and a mechanism $mathcal&#123;M&#125;_i \to \mathcal&#123;M&#125;$
-	$\mathcal&#123;A&#125;$ receives $y_i&#x3D;\mathcal&#123;M&#125;_i(D^&#123;i,b&#125;)$
-	&#125;
-\end&#123;algorithm&#125;</code></pre>
-<p>With respec</p>
+<p><img src="Composition%20Theorems%20for%20Differential%20Privacy.assets/image-20201017205948862.png" srcset="/img/loading.gif" alt="image-20201017205948862"></p>
+<p>We say that the $k$-fold composition experiment $b$ is: $Compose(\mathcal{A},\mathcal{M},k,b)$.</p>
+<p>The <em>$view$</em> of the adversary $\mathcal{A}$ of $k$-fold adaptive composition experiment b, denotes $V^b$, is the sequence $y_1,…y_k$ together with the outcome of any internal randomness of $\mathcal{A}$ </p>
+<script type="math/tex; mode=display">
+V^b=(\mathcal{R}^b,Y^b_1,...,Y^b_k)</script><p>We consider  $V^b$ to be the output of the composition experiment, and that the experiment be differentially private with respect to $b$.</p>
+<p><strong>Definition 2 (Max Divergence)</strong> <em>The Max Divergence between two random variables Y and Z taking values from the same domain is defined to be:</em></p>
+<script type="math/tex; mode=display">
+D_{\infty}(Y \| Z)=\max _{S \subset \operatorname{Supp}(Y)}\left[\ln \frac{\operatorname{Pr}[Y \in S]}{\operatorname{Pr}[Z \in S]}\right]</script><p>The <em>$\delta$-Approximate Max Divergence between $Y$ and $Z$ isdefined to be:</em></p>
+<script type="math/tex; mode=display">
+D_{\infty}^{\delta}(Y \| Z)=\max _{S \subset \operatorname{Supp}(Y): \operatorname{Pr}[Y \in S] \geq \delta}\left[\ln \frac{\operatorname{Pr}[Y \in S]-\delta}{\operatorname{Pr}[Z \in S]}\right]</script><p>​    We can also define an average case notion of divergence:</p>
+<p><strong>Definition 3 (KL-Divergence)</strong> <em>The  KL-Divergence or Relative Entropy between two random variables Y and Z taking values from the same domain is defined to be:</em></p>
+<script type="math/tex; mode=display">
+D(Y \| Z)=\mathrm{E}_{y \sim Y}\left[\ln \frac{\operatorname{Pr}[Y=y]}{\operatorname{Pr}[Z=y]}\right]</script><p>​    Using these definitions, we can rephase privacy under composition:</p>
+<p><strong>Definition 3 (Privacy Under Composition)</strong>  <em>A class of mechanisms satisfies $\epsilon$-differential privacy under $k$-fold adaptive composition, if for every adversary $\mathcal{A}$, $D_{\infty}\left(V^{0} | V^{1}\right) \leq \epsilon$ .  It satisfies $(\epsilon,\delta)$-differential privacy under $k$-fold adaptive composition, if for every adversary $\mathcal{A}$, $D^{\delta}_{\infty}\left(V^{0} | V^{1}\right) \leq \epsilon$</em></p>
+<p>​    The following probabilistic theorem is very useful whenever dealing with randomness:</p>
+<p><strong>Theorem 5 (Azuma’s Inequality)</strong>  <em>Let $f$ be a function of m randoe variables $X_1,…X_m$, each $X_i$ taking values from a set $A_i$, such that $E[f]$ is bounded. Let c_i denote the maximum effect of $X_i$ on $f$ - i.e. for all $a_i,a_i^{‘}\in A_i$:</em> </p>
+<script type="math/tex; mode=display">
+\left|\mathrm{E}\left[f \mid X_{1}, \ldots, X_{i-1}, X_{i}=a_{i}\right]-\mathrm{E}\left[f \mid X_{1}, \ldots, X_{i-1}, X_{i}=a_{i}^{\prime}\right]\right| \leq c_{i}</script><p><em>Then:</em></p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left[f\left(X_{1}, \ldots, X_{m}\right) \geq \mathrm{E}[f]+t\right] \leq \exp \left(-\frac{2 t^{2}}{\sum_{i=1}^{m} c_{i}^{2}}\right)</script><p>​    We can now proof our more sophisticated composition theorem:</p>
+<p><strong>Theorem 6</strong>  <em>Let $\epsilon, \delta≥ 0$. The class of $\epsilon$-differentially private mechanisms satisfies $(\epsilon^{‘},\delta^{‘})$-differential privacy under $k$-fold adaptive composition for:</em></p>
+<script type="math/tex; mode=display">
+\epsilon^{\prime}=\sqrt{2 k \ln \left(1 / \delta^{\prime}\right)} \epsilon+k \epsilon\left(e^{\epsilon}-1\right)</script><p><strong>Lemma 7</strong> <em>Suppose that random variables $Y$ and $Z$ satisfy $D_{\infty}(Y | Z) \leq \epsilon$ and $D_{\infty}(Z | Y) \leq \epsilon$. Then $D(Y | Z) \leq \epsilon\left(e^{\epsilon}-1\right)$.</em></p>
+<p><strong>Proof</strong>  We know that for any $Y$ and $Z$ it is the case that $D(Y | Z) \geq 0$ (Relative entropy is non-negative), and so it suffices to bound $D(Y | Z) +D(Z | Y)$. We get:</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+D(Y \| Z) \leq & D(Y \| Z)+D(Z \| Y) \\
+=& \sum_{y} \operatorname{Pr}[Y=y] \cdot\left(\ln \frac{\operatorname{Pr}[Y=y]}{\operatorname{Pr}[Z=y]}+\ln \frac{\operatorname{Pr}[Z=y]}{\operatorname{Pr}[Y=y]}\right) \\
+&+\sum_{y}(\operatorname{Pr}[Z=y]-\operatorname{Pr}[Y=y]) \cdot\left(\ln \frac{\operatorname{Pr}[Z=y]}{\operatorname{Pr}[Y=y]}\right) \\
+\leq& \sum_{y}[0+|\operatorname{Pr}[Z=y]-\operatorname{Pr}[Y=y]| \cdot \epsilon] \\
+=& \epsilon \cdot \sum_{y}[\max \{\operatorname{Pr}[Y=y], \operatorname{Pr}[Z=y]\}-\min \{\operatorname{Pr}[Y=y], \operatorname{Pr}[Z=y]\}] \\
+\leq& \epsilon \cdot \sum_{y}\left[\left(e^{\epsilon}-1\right) \cdot \min \{\operatorname{Pr}[Y=y], \operatorname{Pr}[Z=y]\}\right] \\
+\leq& \epsilon \cdot\left(e^{\epsilon}-1\right)
+\end{aligned}</script><p>​    We can now finish the proof of the theorem. The idea is that the expected privacy loss after $k$ differentially private algorithms are run is bounded by the above lemma, and taht with high probability, the total privacy loss is not much higher.</p>
+<p><strong>Proof</strong> [Proof of Theorem 6] A view of the adversary $\mathcal{A}$ consists of a tuple of the form $v = (r, y_1,…,y_k)$, where $r$ is the internal randomness of  $\mathcal{A}$ and $y_1,…,y_k$ are the outputs of the mechanisms $\mathcal{M}_1,…,\mathcal{M}_k$. Let </p>
+<script type="math/tex; mode=display">
+B=\left\{v: \operatorname{Pr}\left[V^{0}=v\right]>e^{\epsilon^{\prime}} \cdot \operatorname{Pr}\left[V^{1}=v\right]\right\}</script><p>We will show that $\operatorname{Pr}\left[V^{0} \in S\right] \leq \delta$, and hence for every set $S$, we have</p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left[V^{0} \in S\right] \leq \operatorname{Pr}\left[V^{0} \in B\right]+\operatorname{Pr}\left[V^{0} \in(S \backslash B)\right] \leq \delta+e^{\epsilon^{\prime}} \cdot \operatorname{Pr}\left[V^{1} \in S\right]</script><p>This is equivalent to saying that $D_{\infty}(V^0 | V^1) \leq \epsilon’$.</p>
+<p><strong>Proof</strong></p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left[V^{0} \in S\right]\leq  \delta+e^{\epsilon^{\prime}} \cdot \operatorname{Pr}\left[V^{1} \in S\right]\\
+
+\frac{\operatorname{Pr}\left[V^{0} \in S\right]-\delta}{\operatorname{Pr}\left[V^{1} \in S\right]} \leq  e^{\epsilon^{\prime}}</script><p>​    It remains to show $\operatorname{Pr}\left[V^{0} \in S\right]\leq  \delta$. Let random variable $V^0=(\mathcal{R}^0,Y^0_1,…,Y^0_k)$ denote the view of $A$ in Experiment 0 and $V^1=(\mathcal{R}^1,Y^1_1,…,Y^1_k)$ the view in Experiment 1. Then for a fixed view $v=\left(r, y_{1}, \ldots, y_{i}\right)$ ,we have</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\ln \left(\frac{\operatorname{Pr}\left[V^{0}=v\right]}{\operatorname{Pr}\left[V^{1}=v\right]}\right) &=\ \ln \left(\frac{\operatorname{Pr}\left[R^{0}=r\right]}{\operatorname{Pr}\left[R^{1}=r\right]} \cdot \prod_{i=1}^{k} \frac{\operatorname{Pr}\left[Y_{i}^{0}=y_{i} \mid R^{0}=r, Y_{1}^{0}=y_{1}, \ldots, Y_{i-1}^{0}=y_{i-1}\right]}{\operatorname{Pr}\left[Y_{i}^{1}=y_{i} \mid R^{1}=r, Y_{1}^{1}=y_{1}, \ldots, Y_{i-1}^{1}=y_{i-1}\right]}\right) \\
+&= \ \sum_{i=1}^{k} \ln \left(\frac{\operatorname{Pr}\left[Y_{i}^{0}=y_{i} \mid R^{0}=r, Y_{1}^{0}=y_{1}, \ldots, Y_{i-1}^{0}=y_{i-1}\right]}{\operatorname{Pr}\left[Y_{i}^{1}=y_{i} \mid R^{1}=r, Y_{1}^{1}=y_{1}, \ldots, Y_{i-1}^{1}=y_{i-1}\right]}\right) \\
+&\stackrel{\text { def }}{=} \sum_{i=1}^{k} c_{i}\left(r, y_{1}, \ldots, y_{i}\right)
+\end{aligned}</script><p>Now for every prefix $\left(r, y_{1}, \ldots, y_{i}\right)$ we condition on $R^0=r, Y^0_1=y_1,…Y^0_{i-1}=y_{i-1}$, and analuze the expextation and maximum possible value of the random variable $c_{i}\left(R^0, Y^0_{1}, \ldots, Y^0_{i}\right) = c_{i}\left(r, y_{1}, \ldots, y_{i-1}, Y^0_i\right)$.</p>
+<p>​    Once the prefix is fixed, the next pair of databases $D^{i,0}$and $D^{i,1}$ are also determined. Thus $Y^0_i$ is distributed according to $\mathcal{M}_i(D^{i,0})$. Moreover for any value $y_i$, we have </p>
+<script type="math/tex; mode=display">
+c_{i}\left(r, y_{1}, \ldots, y_{i-1}, y_{i}\right)=\ln \left(\frac{\operatorname{Pr}\left[\mathcal{M}_{i}\left(D^{i, 0}\right)=y_{i}\right]}{\operatorname{Pr}\left[\mathcal{M}_{i}\left(D^{i, 1}\right)=y_{i}\right]}\right)</script><p>By $\epsilon$-differential privacy this is bounder by $\epsilon$. We can also reason as follows:</p>
+<script type="math/tex; mode=display">
+\left|c_{i}\left(r, y_{1}, \ldots, y_{i-1}, y_{i}\right)\right| \leq \max \left\{D_{\infty}\left(\mathcal{M}_{i}\left(D^{i, 0}\right) \| \mathcal{M}_{i}\left(D^{i, 1}\right)\right), D_{\infty}\left(\mathcal{M}_{i}\left(D^{i, 1}\right) \| \mathcal{M}_{i}\left(D^{i, 0}\right)\right)\right\}=\epsilon</script><blockquote>
+<p><strong>Notion:</strong> Using Max Divergence instead of KL-Divergence</p>
+</blockquote>
+<p>By Lemma 7, we have:</p>
+<script type="math/tex; mode=display">
+\mathrm{E}\left[c_{i}\left(R^{0}, Y_{1}^{0}, \ldots, Y_{i}^{0}\right) \mid R^{0}=r, Y_{1}^{0}=y_{1}, \ldots, Y_{i-1}^{0}=y_{i-1}\right]=D\left(\mathcal{M}_{i}\left(D^{i, 0}\right) \| \mathcal{M}_{i}\left(D^{i, 1}\right)\right) \leq \epsilon \cdot\left(e^{\epsilon}-1\right)</script><p>Thus we can apply Azuma’s Inequality (Theorem 5) to the random variables $C_i = c_{i}\left(R^{0}, Y_{1}^{0}, \ldots, Y_{i}^{0}\right)$, letting $f(C_1,…,C_k) = \sum^{k}_{i=1}C_i$, and noting that $\mathrm{E}[f] = k\epsilon·(e^{\epsilon}-1)$. Taking $t=\sqrt{2 k \log (1 / \delta)} \epsilon$, we find:</p>
+<script type="math/tex; mode=display">
+\operatorname{Pr}\left[V^{0} \in B\right]=\operatorname{Pr}\left[f\left(C_{1}, \ldots, C_{k}\right) \geq \mathrm{E}[f]+\sqrt{2 k \log (1 / \delta)} \epsilon\right] \leq \delta</script><p>as desired.</p>
+<p><strong>Proof</strong> </p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\operatorname{Pr}\left[V^{0} \in B\right]=&\operatorname{Pr}\left[\frac{\operatorname{Pr}\left[V^{0}=v\right]}{\operatorname{Pr}\left[V^{1}=v\right]}\geq e^{\epsilon'}\right]\\
+=& \operatorname{Pr}\left[\ln \left(\frac{\operatorname{Pr}\left[V^{0}=v\right]}{\operatorname{Pr}\left[V^{1}=v\right]}\right) \geq \epsilon'\right]\\
+=& \operatorname{Pr}\left[\ln \left(\sum^{k}_{i=1}C_i\right) \geq \epsilon'\right]
+\end{aligned}</script><p>We can get  $\epsilon’ = \mathrm{E}[f]+\sqrt{2 k \log (1 / \delta)} \epsilon$,   $\delta=\exp \left(-\frac{2 t^{2}}{\sum_{i=1}^{k} g_{i}^{2}}\right)$</p>
+<p>Based on formular (12): $\left|c_{i}\left(r, y_{1}, \ldots, y_{i-1}, y_{i}\right)\right| \leq \max \left\{D_{\infty}\left(\mathcal{M}_{i}\left(D^{i, 0}\right) | \mathcal{M}_{i}\left(D^{i, 1}\right)\right), D_{\infty}\left(\mathcal{M}_{i}\left(D^{i, 1}\right) | \mathcal{M}_{i}\left(D^{i, 0}\right)\right)\right\}=\epsilon$</p>
+<p>We can get</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+&maximum\ effect\ of\ X_i\ (The\ bound\ of\ \mathrm{E}[f])\\
+=&|c_{i}\left(r, y_{1}^0, \ldots, y_{i-1}^0, y_{i}^0\right)|-|c_{i}\left(r, y_{1}^1, \ldots, y_{i-1}^1, y_{i}^1\right)|\\
+\leq& \ 2\epsilon
+\end {aligned}</script><p>So, $\sum^{k}_{i=1}g_i=4k\epsilon^2$, and $t=\sqrt{2 k \log (1 / \delta)} \epsilon$</p>
 
             </article>
             <hr>
