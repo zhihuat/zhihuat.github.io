@@ -213,7 +213,7 @@
 <li>Repeated use of differentially private algorithms on <em>different</em> databases that may nevertheless contain information relating to the same individual. This allows us to reason about the cumulative privacy loss of a single individual whose data might be spread across multiple datasets, each of which may be used indenpendently in a differentially private way.</li>
 </ol>
 <p>Towards this end, we consider the following composition experiment, which takes as input an arbitrary adaptive algorithm $\mathcal{A}$ which we view as the “adversary” trying to break the privacy of some family of database access mechanisms $\mathcal{M}$ (e.g.  the set of all $\epsilon$-defferentially private mechanisms), as well as a parameter $b$ which can take values either 0 or 1.</p>
-<p><img src="Composition%20Theorems%20for%20Differential%20Privacy.assets/image-20201017205948862.png" srcset="/img/loading.gif" alt="image-20201017205948862"></p>
+<p><img src="Composition%20Theorems%20for%20Differential%20Privacy.assets/image-20201018163758575.png" srcset="/img/loading.gif" alt="image-20201018163758575" style="zoom:50%;" /></p>
 <p>We say that the $k$-fold composition experiment $b$ is: $Compose(\mathcal{A},\mathcal{M},k,b)$.</p>
 <p>The <em>$view$</em> of the adversary $\mathcal{A}$ of $k$-fold adaptive composition experiment b, denotes $V^b$, is the sequence $y_1,…y_k$ together with the outcome of any internal randomness of $\mathcal{A}$ </p>
 <script type="math/tex; mode=display">
